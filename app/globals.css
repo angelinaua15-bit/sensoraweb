@@ -646,3 +646,33 @@ select {
 .sensora-logo-photo-enter {
   animation: sensora-logo-photo-enter 0.9s cubic-bezier(0.16,1,0.3,1) both;
 }
+/* ── sensoraweb desktop layout ───────────────────────────────────────────────
+   Tablet / laptop / desktop (>= 768px): the app fills the whole window instead
+   of a phone-width column. Content is centered with a comfortable maximum
+   width so text and buttons don't stretch edge to edge on big monitors.
+   Phones (< 768px) are untouched. */
+@media (min-width: 768px) {
+  /* Lists of cards (psychics, articles, etc.) become multi-column. */
+  .sw-main .screen-enter .grid.grid-cols-2 {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  /* Main buttons a bit wider than on a phone. */
+  .sw-main .screen-enter .max-w-xs {
+    max-width: 26rem;
+  }
+  /* Sign-in / sign-up / onboarding / quiz: full-screen background, form in
+     the middle (forms look wrong when stretched across a laptop screen). */
+  .sw-main:is([data-screen="splash"], [data-screen="onboarding"], [data-screen="login"], [data-screen="register"], [data-screen="minitest"], [data-screen="wallet"], [data-screen="review"], [data-screen="settings"])
+    .screen-enter > * {
+    padding-left: max(2rem, calc((100% - 560px) / 2)) !important;
+    padding-right: max(2rem, calc((100% - 560px) / 2)) !important;
+  }
+}
+@media (min-width: 1200px) {
+  /* Everything else: full width up to 1100px of content, centered. */
+  .sw-main:not(:is([data-screen="splash"], [data-screen="onboarding"], [data-screen="login"], [data-screen="register"], [data-screen="minitest"], [data-screen="wallet"], [data-screen="review"], [data-screen="settings"]))
+    .screen-enter > * {
+    padding-left: max(1.5rem, calc((100% - 1100px) / 2)) !important;
+    padding-right: max(1.5rem, calc((100% - 1100px) / 2)) !important;
+  }
+}
