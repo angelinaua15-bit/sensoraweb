@@ -1,0 +1,648 @@
+/* FILE PATH: app/globals.css */
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* SENSORA Brand Tokens */
+  /* REAL BUG FOUND (iOS/Capacitor build, live-tested on iOS Simulator): emoji
+     characters used directly in JSX (today-widgets.tsx, home-screen.tsx —
+     🔥 🎁 etc.) rendered as tofu "?" boxes on iOS, but rendered fine on
+     Android and in the regular browser. Root cause: this stack had no
+     emoji-capable font listed, and WKWebView (Capacitor's iOS wrapper)
+     does not reliably auto-fall-back to Apple Color Emoji the way desktop
+     Safari does when a webfont + generic families are the only options.
+     Fix: list the real system emoji fonts explicitly so WebKit doesn't
+     have to guess — Apple Color Emoji (iOS/macOS), Segoe UI Emoji
+     (Windows, for web/desktop use of the same app), Noto Color Emoji
+     (Android WebView/Linux, belt-and-suspenders since Android already
+     rendered correctly, but harmless to include). */
+  --font-sans: 'Inter', 'Inter Fallback', system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  --font-serif: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* SENSORA custom brand colors — each references a :root custom property
+     (below) rather than a literal hex, the same indirection already used
+     for --color-background etc. just above. That's what lets
+     [data-theme="light"] redefine the underlying --bg-void/--text-primary/
+     etc. values and have every utility class and every var(--token)
+     reference in component files repaint live, with no rebuild. */
+  --color-cosmic-void: var(--bg-void);
+  --color-cosmic-deep: var(--bg-deep);
+  --color-cosmic-mid: var(--bg-mid);
+  --color-cosmic-light: var(--bg-elevated);
+  --color-violet: var(--violet);
+  --color-violet-light: var(--violet-light);
+  --color-magenta: var(--magenta);
+  --color-magenta-light: var(--magenta-light);
+  --color-gold: var(--gold);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-dim: var(--text-dim);
+  --color-online: var(--online);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.6);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* ── SENSORA theme tokens (dark, default) ─────────────────────────────
+     Every screen and CRM panel in the app was previously built with these
+     exact colors hardcoded as literal hex/rgba strings in hundreds of
+     places; that's been converted to var(--token) references everywhere
+     (see components/**, app/**) so this single block — plus its
+     [data-theme="light"] counterpart below — is now the one real source of
+     truth for the whole app's color scheme. Backgrounds are a touch
+     lighter than the original palette per feedback ("трішки світліша"),
+     everything else (violet/magenta accents) is unchanged. */
+  --bg-void: #120B2C;       /* page background (was #0B0620) */
+  --bg-deep: #1D0F3A;       /* popovers / sidebar (was #16092E) */
+  --bg-mid: #291249;        /* cards (was #1F0B3D) */
+  --bg-elevated: #331759;   /* secondary / muted surfaces (was #2A1050) */
+
+  --text-primary: #F5F3FF;
+  --text-muted: #B4A9D6;
+  --text-dim: #9184B5;      /* nudged up slightly from #7B6FA0 for contrast against the lighter background */
+  --text-accent-soft: #D9C6FF;
+
+  /* "Surface elevation" overlays — used to lighten a panel a notch above
+     whatever's behind it. White-tinted in dark mode, violet-tinted in
+     light mode (a plain white wash would be invisible on a white page). */
+  --surface-0: rgba(255,255,255,0.03);
+  --surface-1: rgba(255,255,255,0.06);
+  --surface-2: rgba(255,255,255,0.09);
+  --surface-3: rgba(255,255,255,0.13);
+  --surface-4: rgba(255,255,255,0.17);
+
+  --scrim: rgba(4,2,12,0.8); /* full-screen modal backdrop */
+
+  --violet: #7C3AED;
+  --violet-light: #9D5FF5;
+  --magenta: #D946EF;
+  --magenta-light: #E879F9;
+  --gold: #F5C542;
+  --online: #22C55E;
+
+  /* SENSORA dark purple theme (shadcn tokens, all now indirected through
+     the brand tokens above so they move together) */
+  --background: var(--bg-void);
+  --foreground: var(--text-primary);
+  --card: var(--bg-mid);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-deep);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--magenta);
+  --primary-foreground: var(--text-primary);
+  --secondary: var(--bg-elevated);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-elevated);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--violet);
+  --accent-foreground: var(--text-primary);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: var(--surface-2);
+  --input: var(--surface-2);
+  --ring: var(--violet);
+  --radius: 0.75rem;
+  --chart-1: var(--magenta);
+  --chart-2: var(--violet);
+  --chart-3: var(--gold);
+  --chart-4: var(--text-muted);
+  --chart-5: var(--bg-elevated);
+  --sidebar: var(--bg-deep);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--magenta);
+  --sidebar-primary-foreground: var(--text-primary);
+  --sidebar-accent: var(--bg-elevated);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--surface-2);
+  --sidebar-ring: var(--violet);
+}
+
+/* ── SENSORA theme tokens (light) ───────────────────────────────────────
+   Soft lavender-white page with white cards and violet/magenta accents —
+   the accent colors (violet/magenta/gold) are intentionally identical to
+   dark mode, so the brand still reads as unmistakably "Sensora" either
+   way; only the neutral backgrounds/text flip. Set via the `data-theme`
+   attribute on <html>, written by components/theme-provider.tsx. */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-void: #FAF7FF;
+  --bg-deep: #F2ECFB;
+  --bg-mid: #FFFFFF;
+  --bg-elevated: #ECE1F9;
+
+  --text-primary: #201235;
+  --text-muted: #5B4B7A;
+  --text-dim: #8577A0;
+  --text-accent-soft: #6D28D9;
+
+  --surface-0: rgba(124,58,237,0.03);
+  --surface-1: rgba(124,58,237,0.05);
+  --surface-2: rgba(124,58,237,0.08);
+  --surface-3: rgba(124,58,237,0.12);
+  --surface-4: rgba(124,58,237,0.16);
+
+  --scrim: rgba(20,10,40,0.45);
+
+  --background: var(--bg-void);
+  --foreground: var(--text-primary);
+  --card: var(--bg-mid);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-deep);
+  --popover-foreground: var(--text-primary);
+  --secondary: var(--bg-elevated);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-elevated);
+  --muted-foreground: var(--text-muted);
+  --border: var(--surface-2);
+  --input: var(--surface-2);
+  --sidebar: var(--bg-deep);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-accent: var(--bg-elevated);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--surface-2);
+
+  /* BUG FIX (light theme unreadable buttons): --primary-foreground and
+     --accent-foreground were never redefined here, so they kept inheriting
+     the :root (dark) value — which is `var(--text-primary)`, an indirect
+     reference. That's harmless in dark mode (--text-primary is near-white
+     there) but in light mode --text-primary flips to near-black (#201235),
+     so every shadcn "default" button (bg-primary/text-primary-foreground —
+     see components/ui/button.tsx) silently rendered near-black text on the
+     still-bright magenta/violet button background instead of the intended
+     white. Pinned to a fixed white here so accent-colored buttons keep
+     readable white text in both themes, matching what dark mode already
+     looks like today (its --text-primary just happens to resolve to
+     near-white). --sidebar-primary-foreground has the same inheritance bug
+     for the same reason. */
+  --primary-foreground: #FFFFFF;
+  --accent-foreground: #FFFFFF;
+  --sidebar-primary-foreground: #FFFFFF;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* FIX (2026-09-10, native-readiness audit): standard mobile/WebView
+   hardening that this app-shell UI didn't have yet — none of these existed
+   in this file before. Each addresses a real, specific WKWebView/mobile
+   Safari behavior, not a hypothetical one:
+   - text-size-adjust: iOS can auto-inflate font sizes on rotation even
+     though this app locks orientation-independent layout; 100% disables
+     that inflation so type doesn't jump on rotate.
+   - tap-highlight-color: without this, every button/link flashes the
+     default translucent gray box on tap, which reads as a bug in an app
+     that already has its own active:scale-90 press states everywhere.
+   - touch-action: manipulation removes the ~300ms tap delay browsers use to
+     detect double-tap-to-zoom, and (combined with the viewport's
+     maximumScale:1/userScalable:false in app/layout.tsx) disables pinch and
+     double-tap zoom gestures that don't make sense in a fixed app-shell
+     layout. Applied at body level, not globally, so it doesn't fight
+     scrollable inner containers' own touch handling. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* FIX (small-phone scale): almost every screen in this app sizes text,
+   padding, and radii with Tailwind's rem-based utilities (text-sm, p-4,
+   rounded-2xl, --radius, etc.), all of which are relative to the root
+   <html> font-size (16px by default) — so scaling that one root value down
+   a little on narrow screens shrinks the whole UI proportionally
+   (text, spacing, corners together) without having to touch every
+   component individually.
+   WIDENED (2026-09-18, real-device test): the original breakpoints (380px/
+   340px) only caught the very narrowest phones (iPhone SE-class). Tested
+   live on a real mid-size Android phone (CSS viewport ~412-430px, a very
+   common size — Pixel/Galaxy "standard" phones, not just small ones) and
+   the UI still needed to shrink there, so the top breakpoint now covers
+   that whole common-phone range instead of just the narrowest devices;
+   tablets (generally 600px+) are well above this and untouched. Values are
+   calc()'d as a percentage of the default 16px rather than fixed px so
+   anyone who later changes the base size doesn't have to remember to
+   update this too. */
+@media (max-width: 430px) {
+  html { font-size: calc(16px * 0.94); }
+}
+@media (max-width: 380px) {
+  html { font-size: calc(16px * 0.9); }
+}
+@media (max-width: 340px) {
+  html { font-size: calc(16px * 0.88); }
+}
+
+/* FIX (2026-09-10, native-readiness audit): every text input/textarea in
+   this app uses Tailwind's text-sm (14px), which is under the 16px
+   threshold iOS Safari/WKWebView uses to decide whether to auto-zoom the
+   page when a field is focused. That auto-zoom then usually doesn't zoom
+   back out on blur, leaving the layout stuck zoomed in until the person
+   manually pinches back out — a real, reproducible bug across
+   registration, login, search, chat, and every other text field in the
+   app. This overrides the computed font-size on every input/textarea/select
+   to 16px at all times (not just on focus — the browser reads the size as
+   it is when focus happens, so a focus-only override is unreliable), a
+   real, visible size change from the current 14px look. If the design team
+   wants the smaller 14px look back, the actual fix has to be zooming
+   disabled another way (already done for pinch/double-tap via
+   maximumScale/userScalable in app/layout.tsx) — 16px inputs is the
+   standard, dependable way to stop the focus auto-zoom specifically. */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+/* Magenta CTA button glow */
+.btn-magenta {
+  background: linear-gradient(135deg, #D946EF, #C026D3);
+  box-shadow: 0 4px 24px rgba(217, 70, 239, 0.4);
+}
+.btn-magenta:hover {
+  box-shadow: 0 6px 32px rgba(217, 70, 239, 0.55);
+}
+
+/* Card glow border */
+.card-glow {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  background: linear-gradient(135deg, var(--bg-mid), var(--bg-deep));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.4);
+  border-radius: 2px;
+}
+
+/* Phone frame */
+.phone-screen {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.phone-screen::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Living background: slow-drifting cosmic gradient + twinkling stars ──────
+   Applied to every screen root instead of a flat color, so the whole app
+   feels alive rather than static. Subtle and slow on purpose — this is an
+   ambient backdrop, not a distraction from the UI on top of it.
+   REDESIGNED (per direct request: "фон зірковий але не дуже темний... щоб
+   було прям вау і виглядало дорого і солідно" — starry, not too dark,
+   premium/expensive, Nebula-inspired "wow"). Three changes from the
+   previous version: (1) the base gradient now leans on the lighter
+   --bg-mid/--bg-elevated stops instead of mostly --bg-void/--bg-deep, so it
+   genuinely reads brighter without touching the root color tokens every
+   card/text color still depends on; (2) a third, warm gold radial glow was
+   added alongside the existing violet/magenta ones — that's the "expensive"
+   cue, a hint of warm light instead of an all-cool palette; (3) a real
+   starfield is back (see the two pseudo-elements below), done differently
+   from the attempt this comment used to warn against. */
+@keyframes sensora-drift {
+  0%   { background-position: 0% 30%; }
+  50%  { background-position: 100% 70%; }
+  100% { background-position: 0% 30%; }
+}
+@keyframes sensora-twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
+}
+@keyframes sensora-twinkle-slow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.6; }
+}
+.sensora-bg {
+  position: relative;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(124,58,237,0.26), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(217,70,239,0.22), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 75% 10%, rgba(245,197,66,0.09), transparent 65%),
+    linear-gradient(120deg, var(--bg-void), var(--bg-mid), var(--bg-elevated), var(--bg-mid), var(--bg-void));
+  background-size: 200% 200%, 200% 200%, 180% 180%, 320% 320%;
+  animation: sensora-drift 22s ease-in-out infinite;
+}
+/* Real starfield, take two. The earlier attempt placed a handful of dots
+   directly on the same element that also held the scrollable list, so the
+   dots looked "frozen" relative to content moving underneath them. Fix:
+   these two layers live on ::before/::after — separate boxes stacked
+   BEHIND the actual screen content (z-index 0 vs. the 1 given to real
+   children below) — and they're deliberately dense enough, and varied
+   enough in size/brightness, to read as an actual starfield rather than a
+   few stray specks. Two layers twinkling on different cycles (3.4s bright/
+   near stars, 5.8s dim/far stars, offset start times) fake the effect of
+   many independent stars without animating dozens of elements individually
+   — the whole layer's opacity breathes, but because the two layers are out
+   of phase with each other it doesn't read as a uniform flash. A few of
+   the "near" stars are warm gold instead of white — the same
+   inexpensive-looking single-hue-palette problem the loader ring comment
+   above already solved once; a monochrome white starfield reads flatter
+   and cheaper than one with a couple of warm flecks in it. */
+.sensora-bg::before,
+.sensora-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.sensora-bg::before {
+  background-image:
+    radial-gradient(1.6px 1.6px at 8% 12%, rgba(255,255,255,0.9), transparent 100%),
+    radial-gradient(1.4px 1.4px at 22% 28%, rgba(255,255,255,0.75), transparent 100%),
+    radial-gradient(1.8px 1.8px at 35% 6%, rgba(245,197,66,0.85), transparent 100%),
+    radial-gradient(1.5px 1.5px at 48% 34%, rgba(255,255,255,0.8), transparent 100%),
+    radial-gradient(1.7px 1.7px at 61% 15%, rgba(255,255,255,0.9), transparent 100%),
+    radial-gradient(1.4px 1.4px at 74% 42%, rgba(255,255,255,0.7), transparent 100%),
+    radial-gradient(1.8px 1.8px at 88% 9%, rgba(245,197,66,0.8), transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 55%, rgba(255,255,255,0.85), transparent 100%),
+    radial-gradient(1.4px 1.4px at 40% 63%, rgba(255,255,255,0.7), transparent 100%),
+    radial-gradient(1.7px 1.7px at 67% 58%, rgba(255,255,255,0.85), transparent 100%),
+    radial-gradient(1.5px 1.5px at 92% 50%, rgba(255,255,255,0.75), transparent 100%),
+    radial-gradient(1.6px 1.6px at 25% 78%, rgba(245,197,66,0.75), transparent 100%),
+    radial-gradient(1.4px 1.4px at 55% 85%, rgba(255,255,255,0.7), transparent 100%),
+    radial-gradient(1.8px 1.8px at 82% 72%, rgba(255,255,255,0.9), transparent 100%),
+    radial-gradient(1.5px 1.5px at 10% 92%, rgba(255,255,255,0.75), transparent 100%),
+    radial-gradient(1.6px 1.6px at 70% 95%, rgba(255,255,255,0.8), transparent 100%);
+  animation: sensora-twinkle 3.4s ease-in-out infinite;
+}
+.sensora-bg::after {
+  background-image:
+    radial-gradient(1px 1px at 5% 40%, rgba(255,255,255,0.6), transparent 100%),
+    radial-gradient(1px 1px at 18% 18%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1.1px 1.1px at 30% 48%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 42% 10%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1.1px 1.1px at 50% 60%, rgba(255,255,255,0.6), transparent 100%),
+    radial-gradient(1px 1px at 58% 25%, rgba(255,255,255,0.45), transparent 100%),
+    radial-gradient(1.1px 1.1px at 65% 78%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 78% 20%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1.1px 1.1px at 85% 60%, rgba(255,255,255,0.6), transparent 100%),
+    radial-gradient(1px 1px at 95% 35%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1.1px 1.1px at 12% 70%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 28% 88%, rgba(255,255,255,0.45), transparent 100%),
+    radial-gradient(1.1px 1.1px at 45% 92%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.5), transparent 100%),
+    radial-gradient(1.1px 1.1px at 90% 85%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 20% 5%, rgba(255,255,255,0.45), transparent 100%),
+    radial-gradient(1.1px 1.1px at 38% 80%, rgba(255,255,255,0.55), transparent 100%),
+    radial-gradient(1px 1px at 72% 50%, rgba(255,255,255,0.5), transparent 100%);
+  animation: sensora-twinkle-slow 5.8s ease-in-out infinite 0.8s;
+}
+/* Light theme: the same drifting gradient technique, but built from very
+   pale lavender-white stops instead of near-black ones — otherwise this
+   ambient backdrop would still look like "the dark theme with some purple
+   blobs on it" instead of a genuine light theme. The three radial accent
+   glows above stay as-is; they're already a low-alpha violet/magenta/gold
+   wash that reads fine over pale stops too. No starfield pseudo-elements in
+   light mode — white/gold pinpoint stars on a near-white page just look
+   like dust, not sky, so ::before/::after are switched off here rather
+   than recolored. */
+[data-theme='light'] .sensora-bg {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(124,58,237,0.1), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(217,70,239,0.08), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 75% 10%, rgba(245,197,66,0.06), transparent 65%),
+    linear-gradient(120deg, var(--bg-void), #F3EDFC, var(--bg-deep), #F3EDFC, var(--bg-void));
+}
+[data-theme='light'] .sensora-bg::before,
+[data-theme='light'] .sensora-bg::after {
+  content: none;
+}
+.sensora-bg > * { position: relative; z-index: 1; }
+
+/* Fade entrance used whenever the active screen changes.
+   IMPORTANT: this must never animate `transform` (even translateY(0) at
+   rest). A non-"none" transform on an ancestor creates a new containing
+   block for any `position: fixed` descendant — which silently trapped every
+   full-screen modal (Fortune Wheel, Premium paywall) inside this wrapper's
+   box instead of covering the real viewport. Opacity-only avoids that
+   entirely while still giving every screen switch a soft entrance. */
+@keyframes sensora-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.screen-enter {
+  animation: sensora-enter 0.32s ease-out both;
+}
+
+/* Chat message pop-in (live-chat-screen.tsx). BUG FIX (reported: "повідомлення
+   дуже швидко відправляється і нема ніякої анімації" — messages had no send
+   animation, appeared instantly/abruptly): unlike .screen-enter above, this
+   is safe to animate with `transform` — a message bubble never contains a
+   `position: fixed` descendant (no modal is ever nested inside one), so
+   there's no fixed-positioning containing-block trap to avoid here. Relies
+   on React's own key-based reconciliation: each message keeps a stable
+   `key={msg.id}`, so this only plays once, on the actual DOM insert of a
+   NEW message — existing bubbles keep their same DOM node across re-renders
+   and never replay it. */
+@keyframes sensora-message-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sensora-message-in {
+  animation: sensora-message-in 0.28s cubic-bezier(0.2,0.8,0.2,1) both;
+}
+
+/* Ambient floating sparkle particles (see components/sparkle-field.tsx) */
+@keyframes sensora-float-up {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-70px) scale(1); opacity: 0; }
+}
+.sensora-spark {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--text-primary) 0%, var(--magenta) 60%, transparent 100%);
+  animation: sensora-float-up 6s ease-in infinite;
+}
+
+/* Conic gradient loading ring for the splash "awakening" loader.
+   Previously swept through gold (#F5C542) alongside the violet/magenta
+   brand colors, which read as a mismatched, slightly cheap-looking arc
+   against the rest of the purple palette. Redone as a single-hue
+   violet-to-magenta sweep with one bright white "comet head" highlight —
+   stays entirely within the brand palette and reads as a soft, glowing
+   light trail instead of a candy-striped ring. */
+@keyframes sensora-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes sensora-pulse-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(157,108,240,0.12); }
+  50% { box-shadow: 0 0 70px rgba(157,108,240,0.24); }
+}
+.sensora-loader-ring {
+  background: conic-gradient(from 0deg,
+    rgba(124,58,237,0.15) 0%,
+    #7C3AED 18%,
+    #D946EF 45%,
+    #F5F3FF 52%,
+    #D946EF 59%,
+    #7C3AED 82%,
+    rgba(124,58,237,0.15) 100%);
+  animation: sensora-spin 2.1s cubic-bezier(0.45,0.05,0.55,0.95) infinite;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+}
+.sensora-glow-pulse {
+  animation: sensora-pulse-glow 2.4s ease-in-out infinite;
+}
+
+/* Home screen's main "Start Chat" CTA (your call: "кнопку головну прикольно
+   з анімацією і тд" — make the main button fun, with animation). Three
+   effects layered on top of the existing glow-pulse, all cheap
+   (transform/opacity only, no layout thrash):
+   1. A slow breathing scale on the button itself, same 2.4s cadence as the
+      glow so they read as one motion instead of two competing ones.
+   2. A diagonal light "shine" sweeping across the button every few seconds
+      — the same trick used on premium/CTA buttons everywhere (a bright
+      band translated across a clipped, overflow-hidden container).
+   3. A small bounce on the 💬 emoji, offset from the button's own breathing
+      so the two don't move in perfect lockstep (which reads as robotic). */
+@keyframes sensora-cta-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+.sensora-cta-breathe {
+  animation: sensora-cta-breathe 2.4s ease-in-out infinite;
+}
+/* REPLACED (your call: "прибери той блік на кнопці і додай зірочки"): the
+   sweeping shine band (sensora-cta-shine) is gone. In its place, four small
+   ✦ stars are positioned around the Start Chat button in home-screen.tsx,
+   each fading in/out and gently scaling up on its own staggered delay so
+   they twinkle rather than blink in sync. */
+@keyframes sensora-cta-star {
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(15deg); }
+}
+.sensora-cta-star {
+  color: #fff;
+  font-size: 13px;
+  text-shadow: 0 0 6px rgba(255,255,255,0.8);
+  animation: sensora-cta-star 2.6s ease-in-out infinite;
+}
+@keyframes sensora-cta-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(-6deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-1px) rotate(6deg); }
+}
+.sensora-cta-bounce {
+  animation: sensora-cta-bounce 1.8s ease-in-out infinite;
+}
+
+/* SENSORA brand mark — gradient ribbon "S" + center sparkle (see
+   components/brand/sensora-logo.tsx, which replaced the old 🌙 emoji badge
+   used everywhere: CRM sidebar, staff login/apply/activate, splash screen).
+   Three effects layered: a soft glow breathing behind the ribbon, a sparkle
+   pulse at the crossing point, and a one-time draw-on stroke reveal for
+   first paint (splash only — uses pathLength=1 so it's geometry-independent). */
+@keyframes sensora-logo-glow {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.55; }
+}
+@keyframes sensora-logo-sparkle {
+  0%, 100% { transform: scale(0.85); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+@keyframes sensora-logo-draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+.sensora-logo-glow-el {
+  animation: sensora-logo-glow 3.2s ease-in-out infinite;
+}
+.sensora-logo-sparkle-el {
+  transform-origin: center;
+  animation: sensora-logo-sparkle 2.4s ease-in-out infinite;
+}
+.sensora-logo-draw-el {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sensora-logo-draw 1.4s cubic-bezier(0.65,0,0.35,1) 0.1s forwards;
+}
+
+/* Loading-state variant (SensoraLogo `loop` prop): a short bright trail
+   continuously chases along each ribbon segment, on top of the always-fully
+   -drawn ribbon underneath — the S itself becomes the loading animation. */
+@keyframes sensora-logo-shimmer {
+  0%   { stroke-dashoffset: 1; opacity: 0; }
+  8%   { opacity: 0.95; }
+  24%  { opacity: 0; }
+  100% { stroke-dashoffset: -1; opacity: 0; }
+}
+.sensora-logo-shimmer-el {
+  stroke-dasharray: 0.16 1;
+  animation: sensora-logo-shimmer 2.2s linear infinite;
+}
+
+/* Entrance for the real-photo logo variant (SensoraLogo variant="photo") —
+   an SVG stroke can't "draw on" a flat raster image, so this is a soft
+   scale + fade reveal instead, timed to roughly match sensora-logo-draw. */
+@keyframes sensora-logo-photo-enter {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.sensora-logo-photo-enter {
+  animation: sensora-logo-photo-enter 0.9s cubic-bezier(0.16,1,0.3,1) both;
+}

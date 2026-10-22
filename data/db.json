@@ -1,0 +1,56 @@
+{
+  "users": [
+    { "id": "u1", "name": "Elena Vance", "contact": "elena@example.com", "role": "client", "joined": "Feb 12, 2025", "status": "active" },
+    { "id": "u2", "name": "Alina Petrov", "contact": "alina@example.com", "role": "client", "joined": "Mar 3, 2025", "status": "active" },
+    { "id": "u3", "name": "Luna Verner", "contact": "luna@sensora.app", "role": "expert", "joined": "Jan 1, 2025", "status": "active" },
+    { "id": "u4", "name": "Daria Frost", "contact": "daria@sensora.app", "role": "expert", "joined": "Jan 5, 2025", "status": "active" },
+    { "id": "u5", "name": "Marina Cole", "contact": "marina@example.com", "role": "client", "joined": "Jun 20, 2025", "status": "suspended" }
+  ],
+  "wallets": {
+    "u1": 47.5,
+    "u2": 12.0,
+    "u3": 412,
+    "u4": 218,
+    "u5": 0
+  },
+  "transactions": [
+    { "id": "t1", "userId": "u1", "userName": "Elena Vance", "type": "topup", "amount": 20, "status": "completed", "date": "Jul 6, 2025" },
+    { "id": "t2", "userId": "u1", "userName": "Elena Vance", "type": "session", "amount": -36, "status": "completed", "date": "Jul 6, 2025" },
+    { "id": "t3", "userId": "u2", "userName": "Alina Petrov", "type": "topup", "amount": 50, "status": "completed", "date": "Jul 5, 2025" },
+    { "id": "t4", "userId": "u3", "userName": "Luna Verner", "type": "payout", "amount": -200, "status": "pending", "date": "Jul 5, 2025" },
+    { "id": "t5", "userId": "u5", "userName": "Marina Cole", "type": "topup", "amount": 10, "status": "failed", "date": "Jul 4, 2025" }
+  ],
+  "payouts": [
+    { "id": "p1", "userId": "u3", "expertName": "Luna Verner", "amount": 200, "method": "USDT ...4f2a", "date": "Jul 5, 2025", "status": "pending" },
+    { "id": "p2", "userId": "u4", "expertName": "Daria Frost", "amount": 150, "method": "USDT ...9c31", "date": "Jul 4, 2025", "status": "pending" },
+    { "id": "p3", "userId": "u3", "expertName": "Alex Nightshade", "amount": 80, "method": "USDT ...11ab", "date": "Jul 1, 2025", "status": "approved" }
+  ],
+  "clientCards": [
+    { "id": "c1", "operatorId": "u3", "name": "Elena Vance", "avatar": "EV", "tag": "vip", "sessionsCount": 14, "totalSpent": 412, "lastSession": "Jul 6, 2025", "notes": "Prefers direct, analytical answers. Going through a career change — asked about a new job offer twice. Birthday: March 3." },
+    { "id": "c2", "operatorId": "u3", "name": "Alina Petrov", "avatar": "AP", "tag": "active", "sessionsCount": 5, "totalSpent": 98, "lastSession": "Jul 4, 2025", "notes": "Focused on relationship questions. Responds well to Venus/Mars talk. Follows up roughly every 2 weeks." },
+    { "id": "c3", "operatorId": "u3", "name": "Sofia Marsh", "avatar": "SM", "tag": "new", "sessionsCount": 1, "totalSpent": 12, "lastSession": "Jul 5, 2025", "notes": "First session used the free trial minutes. Asked mostly about career timing — good candidate for a follow-up nudge." },
+    { "id": "c4", "operatorId": "u3", "name": "Tatiana Reyes", "avatar": "TR", "tag": "at_risk", "sessionsCount": 8, "totalSpent": 210, "lastSession": "Jun 2, 2025", "notes": "Was a regular every week, hasn't booked in over a month. Worth a gentle re-engagement message." },
+    { "id": "c5", "operatorId": "u3", "name": "Marina Cole", "avatar": "MC", "tag": "churned", "sessionsCount": 2, "totalSpent": 20, "lastSession": "Apr 18, 2025", "notes": "Balance ran out mid-session and never topped up again." }
+  ],
+  "kpi": {
+    "u3": [
+      { "key": "sessions", "label": "Sessions (30d)", "value": "92", "sub": "Median on platform: 74", "progress": 82 },
+      { "key": "rating", "label": "Average rating", "value": "4.9", "sub": "Based on 1,284 reviews", "progress": 96 },
+      { "key": "minutes", "label": "Chat minutes (30d)", "value": "2,140", "sub": "Milestone bonus at 2,400", "progress": 71 },
+      { "key": "response", "label": "Avg. response time", "value": "18s", "sub": "Threshold for dual chat: 25s", "progress": 90 },
+      { "key": "retention", "label": "Client retention", "value": "38%", "sub": "Clients who book you again", "progress": 62 }
+    ]
+  },
+  "bonuses": [
+    { "id": "b1", "operatorId": "u3", "type": "streak_return", "label": "Returning client bonus", "amount": 3.6, "date": "Jul 6, 2025", "detail": "Elena Vance — 5th consecutive session (+15%)" },
+    { "id": "b2", "operatorId": "u3", "type": "night_shift", "label": "Night shift bonus", "amount": 8.2, "date": "Jul 5, 2025", "detail": "22 min worked between 00:00-08:00 (+25%)" },
+    { "id": "b3", "operatorId": "u3", "type": "chat_minutes", "label": "Weekly minutes milestone", "amount": 25, "date": "Jun 30, 2025", "detail": "600+ minutes this week" },
+    { "id": "b4", "operatorId": "u3", "type": "streak_return", "label": "Returning client bonus", "amount": 1.8, "date": "Jun 28, 2025", "detail": "Alina Petrov — 3rd consecutive session (+10%)" }
+  ],
+  "otps": {},
+  "profileAssignments": [
+    { "id": "pa1", "profileId": "prof-luna", "profileName": "Luna Verner", "operatorId": "u3", "operatorName": "Luna Verner", "assignedAt": "Jan 1, 2025", "unassignedAt": null, "reason": "initial" },
+    { "id": "pa2", "profileId": "prof-daria", "profileName": "Daria Frost", "operatorId": "u4", "operatorName": "Daria Frost", "assignedAt": "Jan 5, 2025", "unassignedAt": null, "reason": "initial" }
+  ],
+  "conversations": []
+}
