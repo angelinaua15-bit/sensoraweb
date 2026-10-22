@@ -32,7 +32,6 @@ import PersonalReadingScreen from '@/components/screens/personal-reading-screen'
 import PrivacyPolicyScreen from '@/components/screens/privacy-policy-screen'
 import SupportScreen from '@/components/screens/support-screen'
 import DesktopSidebar from '@/components/desktop-sidebar'
-import DesktopAuthHero from '@/components/desktop-auth-hero'
 import { getZodiacSignFromDate } from '@/lib/data'
 import { getDeviceId } from '@/lib/device-id'
 
@@ -345,11 +344,11 @@ export default function App() {
   // majority of real usage) max-w-[480px] is wider than the screen itself,
   // so w-full just fills it exactly as before — zero visual change there.
   return (
-    <div className={`min-h-dvh w-full flex justify-center ${showSidebar ? '' : 'md:items-center md:gap-12 lg:gap-20 md:px-10'}`}
-      style={{ background: showSidebar ? 'var(--bg-void)' : 'radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.25), transparent 55%), radial-gradient(ellipse at 85% 80%, rgba(217,70,239,0.18), transparent 50%), var(--bg-void)' }}>
-    {/* sensoraweb: before sign-in on a laptop/tablet — brand panel on the left,
-        the sign-in card on the right. */}
-    {!showSidebar && <DesktopAuthHero />}
+    <div className="min-h-dvh w-full flex justify-center" style={{ background: 'var(--bg-void)' }}>
+    {/* sensoraweb — full-screen web app on tablet/laptop (>= 768px): the app
+        fills the whole window (no phone-width column); after sign-in a left
+        sidebar replaces the bottom bar. Layout rules: app/globals.css
+        ("sensoraweb desktop layout"). */}
     {/* sensoraweb — tablet & computer layout (viewport >= 768px): a left sidebar
         replaces the bottom bar and the content column is wider. Only after
         sign-in — splash/onboarding/login/register stay a centered card. */}
@@ -368,7 +367,8 @@ export default function App() {
         device/build, native fix rebuilt or not, instead of patching each
         screen's own header individually. (safe-area-inset-* only reports a
         real value when viewport-fit=cover is set — see app/layout.tsx.) */}
-    <main className={`h-dvh overflow-hidden bg-[var(--bg-void)] w-full max-w-[480px] relative min-w-0 ${showSidebar ? 'md:max-w-[640px] lg:max-w-[760px] xl:max-w-[880px]' : 'md:max-w-[440px] md:h-[min(860px,92dvh)] md:rounded-3xl md:border md:border-white/10 md:shadow-2xl'}`}
+    <main className={`h-dvh overflow-hidden bg-[var(--bg-void)] w-full max-w-[480px] relative min-w-0 sw-main md:max-w-none md:flex-1`}
+      data-screen={screen}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       <div key={screen} className="screen-enter h-full">
       {screen === 'splash' && (
