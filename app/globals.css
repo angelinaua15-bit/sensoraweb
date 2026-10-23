@@ -656,6 +656,11 @@ select {
   .sw-main .screen-enter .grid.grid-cols-2 {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
+  /* Today screen: the horoscope card grows to fill the leftover height on a
+     phone; on a laptop that leaves a huge empty box — size it to its text. */
+  .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 {
+    flex: 0 0 auto;
+  }
   /* Main buttons a bit wider than on a phone. */
   .sw-main .screen-enter .max-w-xs {
     max-width: 26rem;
