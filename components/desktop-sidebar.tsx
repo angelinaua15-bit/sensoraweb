@@ -27,7 +27,7 @@ export default function DesktopSidebar({ active, userName, balance, onNavigate }
   return (
     <aside
       className="hidden md:flex flex-col flex-shrink-0 h-dvh sticky top-0 w-56 lg:w-64 py-6 px-4"
-      style={{ borderRight: '1px solid var(--surface-1)', background: 'rgba(22,9,46,0.6)' }}
+      style={{ borderRight: '1px solid var(--surface-2)', background: 'var(--bg-deep)' }}
     >
       <div className="flex items-center gap-2.5 px-2 mb-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -45,7 +45,7 @@ export default function DesktopSidebar({ active, userName, balance, onNavigate }
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-left transition-colors"
               style={{
                 background: isActive ? 'rgba(217,70,239,0.14)' : 'transparent',
-                color: isActive ? '#D946EF' : 'var(--text-muted)',
+                color: isActive ? '#C026D3' : 'var(--text-primary)',
                 border: `1px solid ${isActive ? 'rgba(217,70,239,0.3)' : 'transparent'}`,
               }}
             >
@@ -56,9 +56,9 @@ export default function DesktopSidebar({ active, userName, balance, onNavigate }
         })}
       </nav>
 
-      <div className="mt-auto p-3.5 rounded-2xl" style={{ background: 'var(--surface-1)', border: '1px solid var(--surface-2)' }}>
+      <div className="mt-auto p-3.5 rounded-2xl" style={{ background: 'var(--bg-mid)', border: '1px solid var(--surface-2)' }}>
         <p className="text-[var(--text-primary)] text-sm font-medium truncate">{userName || 'Guest'}</p>
-        <p className="text-[var(--text-dim)] text-xs mt-0.5">≈ {minutes} min</p>
+        <p className="text-[var(--text-muted)] text-xs mt-0.5">≈ {minutes} min</p>
         <button
           onClick={() => onNavigate('wallet')}
           className="mt-3 w-full py-2 rounded-xl text-white text-xs font-semibold"
