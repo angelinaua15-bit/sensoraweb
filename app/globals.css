@@ -656,10 +656,17 @@ select {
   .sw-main .screen-enter .grid.grid-cols-2 {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  /* Today screen: the horoscope card grows to fill the leftover height on a
-     phone; on a laptop that leaves a huge empty box — size it to its text. */
+  /* Today screen: the horoscope card fills the rest of the screen (no empty
+     space under it) and shows the whole horoscope instead of 3 lines. */
   .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 .line-clamp-3 {
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
   }
   /* Main buttons a bit wider than on a phone. */
   .sw-main .screen-enter .max-w-xs {
@@ -679,5 +686,12 @@ select {
     .screen-enter > * {
     padding-left: max(1.5rem, calc((100% - 1100px) / 2)) !important;
     padding-right: max(1.5rem, calc((100% - 1100px) / 2)) !important;
+  }
+}
+@media (min-width: 1280px) {
+  /* On a laptop/desktop everything is 20% bigger — phone-sized text and
+     buttons look tiny on a big screen and leave large empty areas. */
+  .sw-main .screen-enter {
+    zoom: 1.2;
   }
 }
