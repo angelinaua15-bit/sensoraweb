@@ -374,8 +374,10 @@ export default function App() {
       {screen === 'splash' && (
         <SplashScreen onStart={() => navigate('onboarding')} onLogin={() => navigate('login')} />
       )}
+      {/* The 3-question quiz after onboarding was removed; date of birth is
+          now a field on the registration form. */}
       {screen === 'onboarding' && (
-        <OnboardingScreen onNext={() => navigate('minitest')} />
+        <OnboardingScreen onNext={() => navigate('register')} />
       )}
       {screen === 'login' && (
         <LoginScreen
@@ -633,4 +635,4 @@ export default function App() {
     </main>
     </div>
   )
-}
+}ч
