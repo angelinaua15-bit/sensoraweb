@@ -3,7 +3,8 @@
 // FILE PATH: components/screens/registration-screen.tsx
 import { useState } from 'react'
 import { PRIVACY_POLICY_SECTIONS, PRIVACY_POLICY_UPDATED } from '@/lib/legal-content'
-import { isValidEmail, isValidPhoneE164, COUNTRY_DIALS } from '@/lib/validation'
+import { isValidEmail, isValidPhoneE164, COUNTRY_DIALS, calculateAge } from '@/lib/validation'
+import BirthDateSelect from '@/components/ui/birth-date-select'
 import OAuthButtons from '@/components/oauth-buttons'
 import { useLanguage } from '@/components/language-provider'
 
@@ -33,8 +34,11 @@ const EyeOffIcon = (
   </svg>
 )
 
-export default function RegisterScreen({ birthDate, onRegistered, onOAuthComplete }: Props) {
+export default function RegisterScreen({ birthDate: initialBirthDate, onRegistered, onOAuthComplete }: Props) {
   const { t } = useLanguage()
+  // Date of birth is asked right here now (the separate quiz screen before
+  // registration was removed). Needed for the 18+ check and the zodiac sign.
+  const [birthDate, setBirthDate] = useState(initialBirthDate || '')
   const [tab, setTab] = useState<'email' | 'phone'>('email')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -88,6 +92,21 @@ export default function RegisterScreen({ birthDate, onRegistered, onOAuthComplet
     if (tab === 'phone' && !isValidPhoneE164(contact)) {
       setError(t('register.invalidPhone'))
       return
+    }
+    if (!birthDate) {
+      setError(t('miniTest.enterBirthDate'))
+      return
+    }
+    {
+      const d = new Date(birthDate)
+      if (isNaN(d.getTime()) || d > new Date()) {
+        setError(t('miniTest.invalidBirthDate'))
+        return
+      }
+      if (calculateAge(d) < 18) {
+        setError(t('miniTest.under18'))
+        return
+      }
     }
     if (password.length < 8) {
       setError(t('register.passwordTooShort'))
@@ -148,6 +167,12 @@ export default function RegisterScreen({ birthDate, onRegistered, onOAuthComplet
           className="w-full px-4 py-3.5 rounded-2xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-dim)] outline-none"
           style={{ background:'var(--surface-1)', border:'1px solid rgba(124,58,237,0.3)' }}
         />
+      </div>
+
+      {/* Date of birth */}
+      <div className="mb-4">
+        <label className="text-[var(--text-muted)] text-xs mb-1.5 block">{t('miniTest.dateOfBirth')}</label>
+        <BirthDateSelect value={birthDate} onChange={v => { setBirthDate(v); setError(null) }} />
       </div>
 
       {/* Tab toggle */}
