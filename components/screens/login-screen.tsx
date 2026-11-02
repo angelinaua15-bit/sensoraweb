@@ -15,6 +15,12 @@ import { useState } from 'react'
 // looks up an existing one first, so these buttons work here as a real
 // "log in with Google/Apple" without any separate endpoint.
 import OAuthButtons from '@/components/oauth-buttons'
+
+// sensoraweb: Google/Apple sign-in only work once this web address is added
+// to the Google Cloud OAuth client and the Apple Services ID. Until then the
+// buttons are hidden (email/phone + password works). Turn on with the Vercel
+// env var NEXT_PUBLIC_ENABLE_OAUTH=1.
+const OAUTH_ENABLED = process.env.NEXT_PUBLIC_ENABLE_OAUTH === '1'
 import { useLanguage } from '@/components/language-provider'
 
 interface Props {
@@ -159,11 +165,13 @@ export default function LoginScreen({ onBack, onLoggedIn, onRegister }: Props) {
         </button>
       </form>
 
-      <div className="flex items-center gap-3 my-5">
-        <div className="flex-1 h-px" style={{ background: 'var(--surface-1)' }} />
-        <span className="text-[var(--text-dim)] text-xs">{t('login.orContinueWith')}</span>
-        <div className="flex-1 h-px" style={{ background: 'var(--surface-1)' }} />
-      </div>
+      {OAUTH_ENABLED && (
+        <div className="flex items-center gap-3 my-5">
+          <div className="flex-1 h-px" style={{ background: 'var(--surface-1)' }} />
+          <span className="text-[var(--text-dim)] text-xs">{t('login.orContinueWith')}</span>
+          <div className="flex-1 h-px" style={{ background: 'var(--surface-1)' }} />
+        </div>
+      )}
 
       {/* No agreedToPrivacy prop passed here on purpose — an account signing
           in with Google/Apple already agreed to the Privacy Policy the
@@ -171,7 +179,7 @@ export default function LoginScreen({ onBack, onLoggedIn, onRegister }: Props) {
           rather than gated behind a checkbox that doesn't exist on this
           screen. See app/api/auth/oauth/route.ts: it only requires
           privacyAccepted when actually creating a brand-new account. */}
-      <OAuthButtons onComplete={onLoggedIn} />
+      {OAUTH_ENABLED && <OAuthButtons onComplete={onLoggedIn} />}
     </div>
   )
 }
