@@ -116,7 +116,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
   // instead of one icon repeated six times.
   const menuItems: { label: string; sub: string | null; action: () => void; icon: JSX.Element }[] = [
     {
-      label: 'Personal details', sub: 'Name, birth date, photo', action: () => onNavigate('settings'),
+      label: t('profile.personal'), sub: t('profile.personalSub'), action: () => onNavigate('settings'),
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="8.2" r="3.4"/>
@@ -125,7 +125,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: 'Payment methods', sub: 'Cards and top-ups', action: onOpenWallet,
+      label: t('profile.payment'), sub: t('profile.paymentSub'), action: onOpenWallet,
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="6" width="18" height="12" rx="2.2"/>
@@ -135,7 +135,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: 'Consultation history', sub: 'All your past sessions', action: () => onNavigate('consult-history'),
+      label: t('profile.history'), sub: t('profile.historySub'), action: () => onNavigate('consult-history'),
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="8.3"/>
@@ -144,7 +144,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: 'Notifications', sub: 'Messages and reminders', action: onOpenNotifications,
+      label: t('profile.notifications'), sub: t('profile.notificationsSub'), action: onOpenNotifications,
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3.2a5 5 0 0 0-5 5v3.1c0 .6-.2 1.2-.6 1.6L5 15.2h14l-1.4-2.3c-.4-.4-.6-1-.6-1.6V8.2a5 5 0 0 0-5-5z"/>
@@ -153,7 +153,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: 'Language & region', sub: currentLocale ? `${currentLocale.flag} ${currentLocale.label}` : 'English', action: () => onNavigate('settings'),
+      label: t('profile.language'), sub: currentLocale ? `${currentLocale.flag} ${currentLocale.label}` : 'English', action: () => onNavigate('settings'),
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="8.3"/>
@@ -162,7 +162,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: 'My horoscope', sub: 'Today\'s outlook', action: () => onNavigate('home'),
+      label: t('profile.horoscope'), sub: t('profile.horoscopeSub'), action: () => onNavigate('home'),
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinejoin="round">
           <path d="M12 3.3l1.9 5.8 6.1.1-4.9 3.7 1.9 5.8-5-3.6-5 3.6 1.9-5.8-4.9-3.7 6.1-.1z"/>
@@ -175,8 +175,8 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
     <div className="flex flex-col h-full sensora-bg">
       <div className="flex-1 overflow-y-auto px-4 pt-3 pb-2">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-[var(--text-primary)] text-xl font-medium">Profile</h2>
-          <button aria-label="Account" onClick={() => onNavigate('settings')}>
+          <h2 className="text-[var(--text-primary)] text-xl font-medium">{t('profile.title')}</h2>
+          <button aria-label={t('profile.account')} onClick={() => onNavigate('settings')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.8" strokeLinecap="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
@@ -214,7 +214,7 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
                 className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded-full font-medium"
                 style={{ background: 'rgba(245,197,66,0.2)', color: '#F5C542' }}
               >
-                Premium Client
+                {t('profile.premium')}
               </span>
             )}
           </div>
@@ -223,13 +223,13 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           {[
-            { label: 'Consultations', value: String(stats.consultations) },
-            { label: 'Experts', value: String(stats.experts) },
+            { label: t('profile.statConsultations'), value: String(stats.consultations) },
+            { label: t('profile.statExperts'), value: String(stats.experts) },
             // REAL FEATURE CHANGED (your call: "все має бути і всюди в
             // хвилинах" — no $ signs anywhere balance/spend is shown to the
             // client). Converted at the same real $2/min rate as the home
             // screen and wallet (PRICE_PER_MIN_USD, lib/minute-packages.ts).
-            { label: 'Spent', value: t('wallet.minutesShort', { mins: Math.floor(stats.spent / PRICE_PER_MIN_USD) }) },
+            { label: t('profile.statSpent'), value: t('wallet.minutesShort', { mins: Math.floor(stats.spent / PRICE_PER_MIN_USD) }) },
           ].map(stat => (
             <div
               key={stat.label}
@@ -262,8 +262,8 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
               </svg>
             </div>
             <div className="text-left">
-              <p className="text-[var(--text-primary)] text-sm font-medium">My balance</p>
-              <p className="text-[var(--text-muted)] text-xs">Top up or view details</p>
+              <p className="text-[var(--text-primary)] text-sm font-medium">{t('profile.myBalance')}</p>
+              <p className="text-[var(--text-muted)] text-xs">{t('profile.myBalanceSub')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
