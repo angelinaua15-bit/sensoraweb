@@ -74,6 +74,19 @@ export default function HomeScreen({ userId, userName, contact, balance, birthDa
   // real chat.
   const freeTrialAvailable = useFreeTrialAvailable(userId ?? null)
   const { t, locale } = useLanguage()
+  // Zodiac sign / element names in the current language (falls back to the
+  // English name if a translation is missing).
+  const zn = (name: string | null | undefined) => {
+    if (!name) return ''
+    const k = `zodiac.${name}`
+    const v = t(k)
+    return v === k ? name : v
+  }
+  const el = (name: string) => {
+    const k = `element.${name}`
+    const v = t(k)
+    return v === k ? name : v
+  }
 
   // Server-backed profile fields (birth time/place, relationship status,
   // real premium flag) — fetched once on mount so a reload always reflects
@@ -306,7 +319,7 @@ export default function HomeScreen({ userId, userName, contact, balance, birthDa
                   from the old layout — still just sign/moon/ascendant, no
                   repeated ☉ line, now as one compact caption. */}
               <p className="text-[var(--text-dim)] text-[11px] mt-0.5 truncate">
-                {sign.name} · ☽ {chart.moon} · Asc {chart.ascendant}
+                {zn(sign.name)} · ☽ {zn(chart.moon)} · Asc {zn(chart.ascendant)}
               </p>
             </div>
           </div>
@@ -397,9 +410,9 @@ export default function HomeScreen({ userId, userName, contact, balance, birthDa
                 dark in the Light theme — dark text on a dark card, nearly
                 invisible. The card now has its own bright violet background
                 and fixed light text so it reads the same in every theme. */}
-            <p className="relative text-white text-sm font-semibold mb-1 mt-2">{t('today.birthChartInfo', { sign: sign.name, element: sign.element })}</p>
+            <p className="relative text-white text-sm font-semibold mb-1 mt-2">{t('today.birthChartInfo', { sign: zn(sign.name), element: el(sign.element) })}</p>
             <p className="relative text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.82)' }}>
-              {t('today.birthChartBody', { sign: sign.name, moon: chart.moon, ascendant: chart.ascendant, dates: sign.dates })}
+              {t('today.birthChartBody', { sign: zn(sign.name), moon: zn(chart.moon), ascendant: zn(chart.ascendant), dates: sign.dates })}
             </p>
           </div>
         )}
@@ -572,7 +585,7 @@ export default function HomeScreen({ userId, userName, contact, balance, birthDa
                 </div>
                 <div>
                   <label className="text-[var(--text-dim)] text-[11px] block mb-1">{t('widgets.placeOfBirth')}</label>
-                  <input value={birthPlaceInput} onChange={e => setBirthPlaceInput(e.target.value)} placeholder="City, Country"
+                  <input value={birthPlaceInput} onChange={e => setBirthPlaceInput(e.target.value)} placeholder={t('home.cityPlaceholder')}
                     className="w-full rounded-xl px-3 py-2.5 text-sm text-[var(--text-primary)] outline-none"
                     style={{ background: 'var(--surface-1)', border: '1px solid var(--surface-2)' }} />
                 </div>
