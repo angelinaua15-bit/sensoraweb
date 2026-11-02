@@ -16,6 +16,7 @@
 // disclosed-in-the-policy-itself pattern as sensora_theme/sensora_locale.
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useLanguage } from '@/components/language-provider'
 
 const ACK_STORAGE_KEY = 'sensora_cookie_notice_ack'
 // Bump this if the notice's substance changes materially — re-shows the
@@ -24,6 +25,7 @@ const ACK_STORAGE_KEY = 'sensora_cookie_notice_ack'
 const ACK_VERSION = '2026-09-10'
 
 export function CookieNoticeBanner() {
+  const { t } = useLanguage()
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -77,14 +79,14 @@ export function CookieNoticeBanner() {
         }}
       >
         <p className="text-white/85 text-[11px] leading-tight flex-1 truncate">
-          We use cookies to keep you signed in — no tracking ads.{' '}
+          {t('cookie.text')}{' '}
           <Link href="/cookies" className="text-[#D9C6FF] underline whitespace-nowrap">
-            Cookie Policy
+            {t('cookie.policy')}
           </Link>
         </p>
         <button
           onClick={dismiss}
-          aria-label="Dismiss"
+          aria-label={t('cookie.dismiss')}
           className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-transform"
           style={{ background: '#9D5FF5', color: '#fff' }}
         >
@@ -95,4 +97,3 @@ export function CookieNoticeBanner() {
       </div>
     </div>
   )
-}
