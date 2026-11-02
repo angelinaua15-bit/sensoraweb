@@ -97,3 +97,5 @@ export function CookieNoticeBanner() {
       </div>
     </div>
   )
+}
+  
