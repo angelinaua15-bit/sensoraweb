@@ -1,3 +1,7 @@
+// Main Sensora app (mobile app + all API routes). Override with the
+// MAIN_APP_URL env var on Vercel if it ever moves.
+const MAIN_APP = (process.env.MAIN_APP_URL || 'https://sensora.space').replace(/\/$/, '')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -17,10 +21,22 @@ const nextConfig = {
   // something (fonts, etc.) without a real test pass first — safer to add
   // narrowly-scoped headers now and layer in a CSP later once it's been
   // tested against every page.
-  // The old client web dashboard (/crm/client) was replaced by the full web
-  // version of the app — anyone with an old link lands in the app instead.
+  // ── sensoraweb (desktop/tablet copy) ──────────────────────────────────────
+  // This repo has NO backend and NO secret keys. Every /api/* call is proxied
+  // to the main app at sensora.space, so accounts, minutes, chats, payments and
+  // the database are exactly the same as in the mobile app. Referral links and
+  // the CRM also live on the main app.
+  async rewrites() {
+    return [
+      { source: '/api/:path*', destination: `${MAIN_APP}/api/:path*` },
+      { source: '/r/:code', destination: `${MAIN_APP}/r/:code` },
+    ]
+  },
   async redirects() {
-    return [{ source: '/crm/client', destination: '/', permanent: false }]
+    return [
+      { source: '/crm', destination: `${MAIN_APP}/crm`, permanent: false },
+      { source: '/crm/:path*', destination: `${MAIN_APP}/crm/:path*`, permanent: false },
+    ]
   },
   async headers() {
     return [
