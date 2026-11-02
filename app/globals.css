@@ -712,3 +712,15 @@ select {
     zoom: 1.2;
   }
 }
+@media (min-width: 768px) {
+  /* Cookie notice: bottom-right on a laptop instead of covering page titles. */
+  [aria-label="Cookie notice"] {
+    top: auto !important;
+    bottom: 1rem;
+    justify-content: flex-end !important;
+    padding: 0 1rem !important;
+  }
+  [aria-label="Cookie notice"] > div {
+    max-width: 420px !important;
+  }
+}
