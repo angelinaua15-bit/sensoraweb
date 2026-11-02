@@ -274,35 +274,10 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
           </div>
         </button>
 
-        {/* Web dashboard link — mints a short-lived signed token first, see
-            openWebDashboard above */}
-        <button
-          onClick={openWebDashboard}
-          disabled={openingDashboard}
-          className="w-full flex items-center justify-between p-4 rounded-2xl mb-4 disabled:opacity-60"
-          style={{
-            background: 'rgba(124,58,237,0.08)',
-            border: '1px dashed rgba(124,58,237,0.35)',
-          }}
-        >
-          <div className="flex items-center gap-3">
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(124,58,237,0.18)' }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
-            </div>
-            <div className="text-left">
-              <p className="text-[var(--text-primary)] text-sm font-medium">{openingDashboard ? 'Opening…' : 'Open web dashboard'}</p>
-              <p className="text-[var(--text-muted)] text-xs">Full history & saved experts on desktop</p>
-            </div>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
+        {/* REMOVED: "Open web dashboard" link. It opened a separate, older
+            English-only client dashboard (/crm/client) that duplicated this app
+            (history, experts, balance) and still described top-ups as "demo
+            minutes". The full web version of the app now covers all of it. */}
 
         {/* Menu items */}
         <div className="flex flex-col gap-1">
