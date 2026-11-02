@@ -2,6 +2,7 @@
 
 // FILE PATH: components/bottom-nav.tsx
 import type { Screen } from '@/app/page'
+import { useLanguage } from '@/components/language-provider'
 
 // 'history' (Readings) used to be a 5th tab here, always on screen. Its
 // content — zodiac blurb, quizzes, practices, and literally the same
@@ -11,11 +12,11 @@ import type { Screen } from '@/app/page'
 // still a real screen and still reachable from the Tarot card on the Today
 // screen ("Discover" button), just not competing for space on every screen.
 const tabs: { id: Screen; label: string }[] = [
-  { id: 'home',     label: 'Today'     },
-  { id: 'search',   label: 'Psychics'  },
-  { id: 'discover', label: 'Discover'  },
-  { id: 'chats',    label: 'Chatroom'  },
-  { id: 'support',  label: 'Support'   },
+  { id: 'home',     label: 'nav.today'     },
+  { id: 'search',   label: 'nav.psychics'  },
+  { id: 'discover', label: 'nav.discover'  },
+  { id: 'chats',    label: 'nav.chatroom'  },
+  { id: 'support',  label: 'nav.support'   },
 ]
 
 function HomeIcon({ active }: { active: boolean }) {
@@ -66,6 +67,7 @@ interface Props {
 }
 
 export default function BottomNav({ active, onNavigate }: Props) {
+  const { t } = useLanguage()
   return (
     <nav
       className="flex md:hidden items-center justify-around px-1 pt-2 pb-4 flex-shrink-0 relative z-20"
@@ -85,10 +87,10 @@ export default function BottomNav({ active, onNavigate }: Props) {
             onClick={() => onNavigate(tab.id)}
             className="flex flex-col items-center gap-0.5 px-2.5 py-1"
             style={{ color: isActive ? '#D946EF' : 'var(--text-dim)' }}
-            aria-label={tab.label}
+            aria-label={t(tab.label)}
           >
             <Icon active={isActive} />
-            <span className="text-[10px] font-medium">{tab.label}</span>
+            <span className="text-[10px] font-medium">{t(tab.label)}</span>
           </button>
         )
       })}
