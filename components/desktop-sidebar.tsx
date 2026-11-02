@@ -5,14 +5,15 @@
 // On a phone-width window it is hidden and the normal bottom bar is used.
 import type { Screen } from '@/app/page'
 import { PRICE_PER_MIN_USD } from '@/lib/minute-packages'
+import { useLanguage } from '@/components/language-provider'
 
 const ITEMS: { id: Screen; label: string; icon: string }[] = [
-  { id: 'home',     label: 'Today',     icon: '✦' },
-  { id: 'search',   label: 'Psychics',  icon: '☾' },
-  { id: 'discover', label: 'Discover',  icon: '✧' },
-  { id: 'chats',    label: 'Chatroom',  icon: '💬' },
-  { id: 'support',  label: 'Support',   icon: '?' },
-  { id: 'profile',  label: 'Profile',   icon: '👤' },
+  { id: 'home',     label: 'nav.today',     icon: '✦' },
+  { id: 'search',   label: 'nav.psychics',  icon: '☾' },
+  { id: 'discover', label: 'nav.discover',  icon: '✧' },
+  { id: 'chats',    label: 'nav.chatroom',  icon: '💬' },
+  { id: 'support',  label: 'nav.support',   icon: '?' },
+  { id: 'profile',  label: 'nav.profile',   icon: '👤' },
 ]
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export default function DesktopSidebar({ active, userName, balance, onNavigate }: Props) {
+  const { t } = useLanguage()
   const minutes = Math.max(0, Math.floor(balance / PRICE_PER_MIN_USD))
   return (
     <aside
@@ -50,21 +52,21 @@ export default function DesktopSidebar({ active, userName, balance, onNavigate }
               }}
             >
               <span className="w-5 text-center">{item.icon}</span>
-              {item.label}
+              {t(item.label)}
             </button>
           )
         })}
       </nav>
 
       <div className="mt-auto p-3.5 rounded-2xl" style={{ background: 'var(--bg-mid)', border: '1px solid var(--surface-2)' }}>
-        <p className="text-[var(--text-primary)] text-sm font-medium truncate">{userName || 'Guest'}</p>
+        <p className="text-[var(--text-primary)] text-sm font-medium truncate">{userName || t('nav.guest')}</p>
         <p className="text-[var(--text-muted)] text-xs mt-0.5">≈ {minutes} min</p>
         <button
           onClick={() => onNavigate('wallet')}
           className="mt-3 w-full py-2 rounded-xl text-white text-xs font-semibold"
           style={{ background: 'linear-gradient(135deg,#7C3AED,#D946EF)' }}
         >
-          Top up minutes
+          {t('nav.topUp')}
         </button>
       </div>
     </aside>
