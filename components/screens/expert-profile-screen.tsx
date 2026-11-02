@@ -124,7 +124,9 @@ export default function ExpertProfileScreen({ expert, userId, onBack, onStartCha
           ))}
         </div>
 
+        {expert.tags.length > 0 && (
         <h3 className="text-[var(--text-primary)] text-sm font-medium mb-2">{t('expertProfile.specializations')}</h3>
+        )}
         <div className="flex flex-wrap gap-2 mb-4">
           {expert.tags.map(tag => (
             <span key={tag} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-[var(--text-muted)]"
