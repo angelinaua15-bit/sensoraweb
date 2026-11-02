@@ -6,6 +6,12 @@ import { PRIVACY_POLICY_SECTIONS, PRIVACY_POLICY_UPDATED } from '@/lib/legal-con
 import { isValidEmail, isValidPhoneE164, COUNTRY_DIALS, calculateAge } from '@/lib/validation'
 import BirthDateSelect from '@/components/ui/birth-date-select'
 import OAuthButtons from '@/components/oauth-buttons'
+
+// sensoraweb: Google/Apple sign-in only work once this web address is added
+// to the Google Cloud OAuth client and the Apple Services ID. Until then the
+// buttons are hidden (email/phone + password works). Turn on with the Vercel
+// env var NEXT_PUBLIC_ENABLE_OAUTH=1.
+const OAUTH_ENABLED = process.env.NEXT_PUBLIC_ENABLE_OAUTH === '1'
 import { useLanguage } from '@/components/language-provider'
 
 interface Props {
@@ -302,11 +308,13 @@ export default function RegisterScreen({ birthDate: initialBirthDate, onRegister
         {loading ? t('register.creatingAccount') : t('register.continue')}
       </button>
 
-      <div className="flex items-center gap-3 my-5">
-        <div className="flex-1 h-px" style={{ background:'var(--surface-1)' }} />
-        <span className="text-[var(--text-dim)] text-xs">{t('register.orContinueWith')}</span>
-        <div className="flex-1 h-px" style={{ background:'var(--surface-1)' }} />
-      </div>
+      {OAUTH_ENABLED && (
+        <div className="flex items-center gap-3 my-5">
+          <div className="flex-1 h-px" style={{ background:'var(--surface-1)' }} />
+          <span className="text-[var(--text-dim)] text-xs">{t('register.orContinueWith')}</span>
+          <div className="flex-1 h-px" style={{ background:'var(--surface-1)' }} />
+        </div>
+      )}
 
       {/* THE ACTUAL BUG THAT WAS BREAKING THE WHOLE SITE: this used to be a
           leftover copy of the OLD inline Google/Apple buttons block (from
@@ -324,7 +332,7 @@ export default function RegisterScreen({ birthDate: initialBirthDate, onRegister
           — not a guess. Fixed by actually using the shared OAuthButtons
           component (already imported at the top of this file, but never
           rendered) instead of the dead leftover markup. */}
-      <OAuthButtons name={name} birthDate={birthDate} agreedToPrivacy={agreedToPrivacy} onComplete={onOAuthComplete} />
+      {OAUTH_ENABLED && <OAuthButtons name={name} birthDate={birthDate} agreedToPrivacy={agreedToPrivacy} onComplete={onOAuthComplete} />}
 
       {showPolicy && (
         <div className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center" style={{ background: 'var(--scrim)', backdropFilter: 'blur(4px)' }}>
