@@ -29,8 +29,10 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/components/language-provider'
 
 function PaymentStatus() {
+  const { t } = useLanguage()
   const params = useSearchParams()
   const sessionId = params.get('session_id')
   const cancelled = params.get('cancelled') === '1'
@@ -54,9 +56,9 @@ function PaymentStatus() {
   if (cancelled) {
     return (
       <>
-        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">Payment cancelled</h1>
+        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">{t('pay.cancelledTitle')}</h1>
         <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-          No charge was made. You can return to the Sensora app and try again whenever you're ready.
+          {t('pay.cancelledBody')}
         </p>
       </>
     )
@@ -65,8 +67,8 @@ function PaymentStatus() {
   if (status === 'checking') {
     return (
       <>
-        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">Checking your payment…</h1>
-        <p className="text-[var(--text-muted)] text-sm leading-relaxed">One moment.</p>
+        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">{t('pay.checkingTitle')}</h1>
+        <p className="text-[var(--text-muted)] text-sm leading-relaxed">{t('pay.checkingBody')}</p>
       </>
     )
   }
@@ -74,11 +76,11 @@ function PaymentStatus() {
   if (status === 'paid') {
     return (
       <>
-        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">Thank you — payment received</h1>
+        <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">{t('pay.paidTitle')}</h1>
         <p className="text-[var(--text-muted)] text-sm leading-relaxed">
           {isReading
-            ? 'A reader will start recording your personal tarot spread video shortly. Return to the app to check its status.'
-            : 'Your minutes will appear in your Sensora wallet automatically, usually within a few seconds. Return to the app to see your updated balance.'}
+            ? t('pay.paidReading')
+            : t('pay.paidMinutes')}
         </p>
       </>
     )
@@ -86,11 +88,11 @@ function PaymentStatus() {
 
   return (
     <>
-      <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">Payment received</h1>
+      <h1 className="text-[var(--text-primary)] text-2xl font-serif mb-2">{t('pay.pendingTitle')}</h1>
       <p className="text-[var(--text-muted)] text-sm leading-relaxed">
         {isReading
-          ? "We're confirming it now — your personal reading request will move to \"waiting to be recorded\" automatically once that's done, usually within a few seconds. Return to the app to check its status. If it doesn't update within a few minutes, contact support and we'll check it by hand."
-          : "We're confirming it now — your minutes will appear in your Sensora wallet automatically once that's done, usually within a few seconds. Return to the app to see your updated balance. If it doesn't update within a few minutes, contact support and we'll check it by hand."}
+          ? t('pay.pendingReading')
+          : t('pay.pendingMinutes')}
       </p>
     </>
   )
@@ -106,7 +108,7 @@ export default function PaymentSuccessPage() {
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
           </svg>
         </div>
-        <Suspense fallback={<p className="text-[var(--text-muted)] text-sm">Loading…</p>}>
+        <Suspense fallback={<p className="text-[var(--text-muted)] text-sm">…</p>}>
           <PaymentStatus />
         </Suspense>
         <Link href="/" className="inline-block mt-6 text-[#9D5FF5] text-xs underline">
