@@ -99,7 +99,7 @@ export default function SupportScreen({ onNavigate }: Props) {
     <div className="flex flex-col h-full sensora-bg">
       <div className="flex-1 overflow-y-auto px-4 pt-3 pb-2">
         <div className="flex items-center gap-2.5 mb-4">
-          <button onClick={() => onNavigate('home')} aria-label={t('support.back')}
+          <button onClick={() => onNavigate('profile')} aria-label={t('support.back')}
             className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--surface-1)' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="2.2" strokeLinecap="round"><path d="M19 12H5M12 5l-7 7 7 7" /></svg>
           </button>
@@ -179,7 +179,7 @@ export default function SupportScreen({ onNavigate }: Props) {
           </div>
         )}
       </div>
-      <BottomNav active="support" onNavigate={onNavigate} />
+      <BottomNav active="profile" onNavigate={onNavigate} />
     </div>
   )
 }
