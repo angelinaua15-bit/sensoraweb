@@ -162,10 +162,13 @@ export default function ProfileScreen({ userName, userId, contact, balance, onNa
       ),
     },
     {
-      label: t('profile.horoscope'), sub: t('profile.horoscopeSub'), action: () => onNavigate('home'),
+      // Support moved here from the bottom menu.
+      label: t('profile.support'), sub: t('profile.supportSub'), action: () => onNavigate('support'),
       icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinejoin="round">
-          <path d="M12 3.3l1.9 5.8 6.1.1-4.9 3.7 1.9 5.8-5-3.6-5 3.6 1.9-5.8-4.9-3.7 6.1-.1z"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9D5FF5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="8.3"/>
+          <path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/>
+          <line x1="12" y1="16.9" x2="12.01" y2="16.9"/>
         </svg>
       ),
     },
