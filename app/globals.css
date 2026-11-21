@@ -656,21 +656,9 @@ select {
   .sw-main .screen-enter .grid.grid-cols-2 {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
-  /* Today screen: the horoscope card fills the rest of the screen (no empty
-     space under it) and shows the whole horoscope instead of 3 lines. */
-  .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-  }
-  /* The whole horoscope is already shown, so "Show more" has nothing to open. */
-  .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 > button {
-    display: none;
-  }
-  /* Nothing on the Today screen may get squashed when something opens
-     (e.g. the Birth Chart card was collapsing into a thin bar). */
-  .sw-main[data-screen="home"] .screen-enter .overflow-y-auto > * {
-    flex-shrink: 0 !important;
+  /* Home screen: the live hero gets more height on big screens. */
+  .sw-main[data-screen="home"] .sw-home-hero {
+    min-height: 360px;
   }
   /* Psychic cards: square photo so faces aren't cut off on wide cards. */
   .sw-main .screen-enter .grid > button > div.relative[style*="height"] {
@@ -679,11 +667,6 @@ select {
   }
   .sw-main .screen-enter .grid > button > div.relative[style*="height"] img {
     object-position: center 30%;
-  }
-  .sw-main[data-screen="home"] .screen-enter .rounded-2xl.flex-1 .line-clamp-3 {
-    -webkit-line-clamp: unset;
-    display: block;
-    overflow: visible;
   }
   /* Main buttons a bit wider than on a phone. */
   .sw-main .screen-enter .max-w-xs {
