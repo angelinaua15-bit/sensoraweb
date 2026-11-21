@@ -12,7 +12,6 @@ const ITEMS: { id: Screen; label: string; icon: string }[] = [
   { id: 'search',   label: 'nav.psychics',  icon: '☾' },
   { id: 'discover', label: 'nav.discover',  icon: '✧' },
   { id: 'chats',    label: 'nav.chatroom',  icon: '💬' },
-  { id: 'support',  label: 'nav.support',   icon: '?' },
   { id: 'profile',  label: 'nav.profile',   icon: '👤' },
 ]
 
