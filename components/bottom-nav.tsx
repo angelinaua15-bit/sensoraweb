@@ -4,6 +4,8 @@
 import type { Screen } from '@/app/page'
 import { useLanguage } from '@/components/language-provider'
 
+// Support moved into Profile (Profile → Help & support); Profile took its
+// place as the 5th tab.
 // 'history' (Readings) used to be a 5th tab here, always on screen. Its
 // content — zodiac blurb, quizzes, practices, and literally the same
 // DISCOVER_ARTICLES array — overlaps almost entirely with the Discover tab
@@ -16,7 +18,7 @@ const tabs: { id: Screen; label: string }[] = [
   { id: 'search',   label: 'nav.psychics'  },
   { id: 'discover', label: 'nav.discover'  },
   { id: 'chats',    label: 'nav.chatroom'  },
-  { id: 'support',  label: 'nav.support'   },
+  { id: 'profile',  label: 'nav.profile'   },
 ]
 
 function HomeIcon({ active }: { active: boolean }) {
@@ -50,6 +52,14 @@ function ChatIcon({ active }: { active: boolean }) {
     </svg>
   )
 }
+function ProfileIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="4" fill={active ? 'rgba(217,70,239,0.2)' : 'none'} />
+      <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+    </svg>
+  )
+}
 function SupportIcon({ active }: { active: boolean }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -59,7 +69,7 @@ function SupportIcon({ active }: { active: boolean }) {
     </svg>
   )
 }
-const icons = { home: HomeIcon, search: SearchIcon, discover: DiscoverIcon, chats: ChatIcon, support: SupportIcon }
+const icons = { home: HomeIcon, search: SearchIcon, discover: DiscoverIcon, chats: ChatIcon, profile: ProfileIcon, support: SupportIcon }
 
 interface Props {
   active: string
@@ -73,7 +83,7 @@ export default function BottomNav({ active, onNavigate }: Props) {
       className="flex md:hidden items-center justify-around px-1 pt-2 pb-4 flex-shrink-0 relative z-20"
       style={{
         borderTop: '1px solid var(--surface-1)',
-        background: 'rgba(22,9,46,0.98)',
+        background: 'var(--bg-deep)',
         backdropFilter: 'blur(12px)',
         paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))',
       }}
